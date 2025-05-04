@@ -18,7 +18,6 @@ import { OrderModule } from './order/order.module'
     MongooseModule.forRoot(configProvider.useValue.database.url),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
-      serveRoot: '/content/afisha/',
     }),
   ],
   controllers: [],
