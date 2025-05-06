@@ -20,7 +20,7 @@ export class FilmsService {
     const film = await this.filmsModel.findOne({ id })
 
     return {
-      total: 1,
+      total: film.schedule.length,
       items: film.schedule,
     }
   }

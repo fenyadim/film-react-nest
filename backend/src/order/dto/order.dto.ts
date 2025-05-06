@@ -2,8 +2,10 @@ import {
   IsEmail,
   IsNotEmpty,
   IsNumber,
+  IsOptional,
   IsPhoneNumber,
   IsString,
+  IsUUID,
   ValidateNested,
 } from 'class-validator'
 
@@ -24,6 +26,10 @@ export class CreateOrderDto {
 }
 
 export class Tickets {
+  @IsOptional()
+  @IsUUID()
+  id: string
+
   @IsNotEmpty()
   @IsString()
   film: string
