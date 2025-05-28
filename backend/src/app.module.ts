@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
-import { MongooseModule } from '@nestjs/mongoose'
 import { ServeStaticModule } from '@nestjs/serve-static'
+import { TypeOrmModule } from '@nestjs/typeorm'
 import { join } from 'path'
 import { configProvider } from './app.config.provider'
+import { Films, Schedules } from './films/films.entity'
 import { FilmsModule } from './films/films.module'
 import { OrderModule } from './order/order.module'
 
@@ -15,9 +16,18 @@ import { OrderModule } from './order/order.module'
     }),
     FilmsModule,
     OrderModule,
-    MongooseModule.forRoot(configProvider.useValue.database.url),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
+    }),
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: 'localhost',
+      port: 5433,
+      username: configProvider.useValue.database.username,
+      password: configProvider.useValue.database.password,
+      database: 'film_react_nest',
+      entities: [Films, Schedules],
+      synchronize: false,
     }),
   ],
   controllers: [],
