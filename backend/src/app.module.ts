@@ -20,9 +20,9 @@ import { OrderModule } from './order/order.module'
       rootPath: join(__dirname, '..', 'public'),
     }),
     TypeOrmModule.forRoot({
-      type: 'postgres',
+      type: configProvider.useValue.database.driver,
       host: 'localhost',
-      port: 5433,
+      port: Number(configProvider.useValue.database.port),
       username: configProvider.useValue.database.username,
       password: configProvider.useValue.database.password,
       database: 'film_react_nest',
