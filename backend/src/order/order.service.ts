@@ -1,20 +1,34 @@
 import { BadRequestException, Injectable } from '@nestjs/common'
-import { InjectModel } from '@nestjs/mongoose'
-import { Model } from 'mongoose'
-import { Film } from '../films/schemas/Film.schema'
+import { InjectRepository } from '@nestjs/typeorm'
+import { Films, Schedules } from 'src/films/films.entity'
+import { Repository } from 'typeorm'
 import { Tickets } from './dto/order.dto'
 
 @Injectable()
 export class OrderService {
-  constructor(@InjectModel(Film.name) private filmsModel: Model<Film>) {}
+  constructor(
+    @InjectRepository(Films)
+    private filmsRepository: Repository<Films>,
+    @InjectRepository(Schedules)
+    private schedulesRepository: Repository<Schedules>,
+  ) {}
 
   async createOrder(tickets: Tickets[]) {
     for (const order of tickets) {
-      const film = await this.filmsModel.findOne({ id: order.film })
+      const film = await this.filmsRepository.findOne({
+        where: {
+          id: order.film,
+        },
+        relations: {
+          schedule: true,
+        },
+      })
       if (!film) {
         throw new BadRequestException('Фильм не найден')
       }
-      const session = film.schedule.find((s) => s.id === order.session)
+      const session = await this.schedulesRepository.findOneBy({
+        id: order.session,
+      })
       if (!session) {
         throw new BadRequestException('Сеанс не найден')
       }
@@ -25,8 +39,14 @@ export class OrderService {
       if (session.taken.includes(orderSeat)) {
         throw new BadRequestException('Это место уже занято')
       }
-      session.taken.push(orderSeat)
-      film.save()
+      if (!session.taken) {
+        session.taken = orderSeat
+      } else {
+        const takenArr = session.taken.split(',')
+        takenArr.push(orderSeat)
+        session.taken = takenArr.join(',')
+      }
+      await this.schedulesRepository.save(session)
     }
 
     return {
