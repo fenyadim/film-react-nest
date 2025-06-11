@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Films, Schedules } from 'src/films/films.entity'
 import { Repository } from 'typeorm'
+import { Films, Schedules } from '../films/films.entity'
 import { Tickets } from './dto/order.dto'
 
 @Injectable()

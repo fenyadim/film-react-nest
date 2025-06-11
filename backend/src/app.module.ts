@@ -21,7 +21,7 @@ import { OrderModule } from './order/order.module'
     }),
     TypeOrmModule.forRoot({
       type: configProvider.useValue.database.driver,
-      host: 'localhost',
+      host: configProvider.useValue.database.host,
       port: Number(configProvider.useValue.database.port),
       username: configProvider.useValue.database.username,
       password: configProvider.useValue.database.password,

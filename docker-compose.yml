@@ -1,0 +1,87 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    image: ghcr.io/fenyadim/film-nest-frontend
+    environment:
+      VITE_API_URL: ${VITE_API_URL:-http://fenyadim.nomorepartiessbs.ru/api/afisha}
+      VITE_CDN_URL: ${VITE_CDN_URL:-http://fenyadim.nomorepartiessbs.ru/content/afisha}
+    networks:
+      - webnet
+    volumes:
+      - frontend_dist:/app/dist
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: backend
+    image: ghcr.io/fenyadim/film-nest-backend
+    restart: always
+    networks:
+      - webnet
+      - db
+    environment:
+      DATABASE_DRIVER: postgres
+      DATABASE_HOST: postgres
+      DATABASE_USERNAME: student
+      DATABASE_PASSWORD: student
+      DATABASE_PORT: 5432
+    depends_on:
+      - postgres
+    ports:
+      - '3000:3000'
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      POSTGRES_USER: student
+      POSTGRES_PASSWORD: student
+      POSTGRES_DB: film_react_nest
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/data/db
+    networks:
+      - db
+
+  pgadmin:
+    container_name: pgadmin_container
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-example@ya.ru}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    depends_on:
+      - postgres
+    ports:
+      - '${PGADMIN_PORT:-8080}:80'
+    networks:
+      - db
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - 80:80
+      - 443:443
+    networks:
+      - webnet
+    restart: always
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - frontend_dist:/var/www/frontend:ro
+
+volumes:
+  postgres_data:
+  frontend_dist:
+  pgadmin:
+
+networks:
+  webnet:
+  db:
