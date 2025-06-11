@@ -14,9 +14,9 @@ jobs:
       matrix:
         include:
           - dockerfile: ./backend/Dockerfile
-            image: ghcr.io/fenyadim/film-nest-backend:latest
+            image: ghcr.io/fenyadim/film-nest-backend
           - dockerfile: ./frontend/Dockerfile
-            image: ghcr.io/fenyadim/film-nest-frontend:latest
+            image: ghcr.io/fenyadim/film-nest-frontend
     permissions:
       contents: read
       packages: write
