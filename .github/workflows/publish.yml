@@ -27,7 +27,7 @@ jobs:
       - uses: actions/checkout@v4 # Checking out the repo
 
       - name: login to docker hub
-        run: echo "${{ secrets.GH_TOKEN }}" | docker login --username fenyadim --password ${{ secrets.GH_TOKEN }} ghcr.io
+        run: echo "${{ secrets.GH_TOKEN }}" | docker login --username fenyadim --password ${{ secrets.GH_TOKEN }} ghcr.io | docker buildx prune
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
