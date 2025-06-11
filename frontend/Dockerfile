@@ -8,6 +8,4 @@ RUN npm i
 
 COPY . .
 
-ARG VITE_API_URL="http://localhost:3000/api/afisha"
-
-RUN VITE_API_URL=${VITE_API_URL} npm run build 
+RUN npm run build 

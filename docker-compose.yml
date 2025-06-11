@@ -4,9 +4,9 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     container_name: frontend
-    image: ghcr.io/fenyadim/film-nest-frontend:latest
-    env_file:
-      - ./frontend/.env
+    image: ghcr.io/fenyadim/film-nest-frontend
+    environment:
+      VITE_API_URL: http://backend:3000/api/afisha
     networks:
       - webnet
     volumes:
@@ -17,12 +17,13 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     container_name: backend
-    image: ghcr.io/fenyadim/film-nest-backend:latest
+    image: ghcr.io/fenyadim/film-nest-backend
     restart: always
     networks:
       - webnet
       - db
     environment:
+      DATABASE_DRIVER: postgres
       DATABASE_HOST: postgres
       DATABASE_USERNAME: student
       DATABASE_PASSWORD: student
