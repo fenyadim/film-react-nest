@@ -27,7 +27,7 @@ jobs:
       - uses: actions/checkout@v4 # Checking out the repo
 
       - name: login to docker hub
-        run: echo "${{ secrets.GH_TOKEN }}" | docker login -u "${{ secrets.GH_TOKEN }}" --password-stdin
+        run: echo "${{ secrets.GH_TOKEN }}" | docker login -u fenyadim --password-stdin
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
