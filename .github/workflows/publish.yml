@@ -13,10 +13,12 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - dockerfile: ./backend/Dockerfile
+          - dockerfile: backend/Dockerfile
             image: ghcr.io/fenyadim/film-nest-backend
-          - dockerfile: ./frontend/Dockerfile
+            path: backend
+          - dockerfile: frontend/Dockerfile
             image: ghcr.io/fenyadim/film-nest-frontend
+            path: frontend
     permissions:
       contents: read
       packages: write
@@ -40,7 +42,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
         with:
-          context: .
+          context: ${{ matrix.path }}
           file: ${{ matrix.dockerfile }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
