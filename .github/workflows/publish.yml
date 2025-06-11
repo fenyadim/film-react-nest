@@ -26,20 +26,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4 # Checking out the repo
 
-<<<<<<< HEAD
-      - name: login to docker hub
-        run: echo "${{ secrets.GH_TOKEN }}" | docker login --username fenyadim --password ${{ secrets.GH_TOKEN }} ghcr.io | docker buildx prune
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-=======
       - name: Log in to the Container registry
         uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ github.token }}
->>>>>>> e429a8873de27dc7e99976829f69a54fbe525836
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
