@@ -5,6 +5,9 @@ services:
       dockerfile: Dockerfile
     container_name: frontend
     image: ghcr.io/fenyadim/film-nest-frontend
+    environment:
+      VITE_API_URL: ${VITE_API_URL:-http://fenyadim.nomorepartiessbs.ru/api/afisha}
+      VITE_CDN_URL: ${VITE_CDN_URL:-http://fenyadim.nomorepartiessbs.ru/content/afisha}
     networks:
       - webnet
     volumes:
