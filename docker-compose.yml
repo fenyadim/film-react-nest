@@ -4,6 +4,7 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     container_name: frontend
+    image: ghcr.io/fenyadim/film-nest-frontend:latest
     env_file:
       - ./frontend/.env
     networks:
@@ -16,6 +17,7 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     container_name: backend
+    image: ghcr.io/fenyadim/film-nest-backend:latest
     restart: always
     networks:
       - webnet
