@@ -26,12 +26,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4 # Checking out the repo
 
-      - name: Log in to the Container registry
-        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: login to docker hub
+        run: echo "${{ secrets.GH_TOKEN }}" | docker login -u "${{ secrets.GH_TOKEN }}" --password-stdin
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
